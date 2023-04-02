@@ -1,5 +1,5 @@
 import java.util.*;
-class Game {
+class solve {
     private static char[][] create_board(){
         char[][] a = new char[3][3];
         for(char[] row : a){
@@ -7,12 +7,13 @@ class Game {
         }
         return a;
     }
-    private static void play(char player, int row, int col, char[][] board){
+    private static void play(char player, int row, int col, char[][] board, int[] filled){
         if(row<0 || row>3 || col<0 || col>2 || board[row][col] != ' '){
             System.out.println("INVALID MOVE..!");
             return;
         }
         board[row][col] = player;
+        filled[0]++;
     }
     private static void display(char[][] a){
         System.out.println(" -------------");
@@ -38,15 +39,17 @@ class Game {
         boolean gameOver = false;
         char player = 'O';
         int row, col;
-        while(!gameOver){
+        int[] filled = {0};
+        while(!gameOver && filled[0] != 3*3){
             player = player == 'X' ? 'O' : 'X';
             System.out.println("Row and Col for '"+player +"' ->");
             row = in.nextInt();
             col = in.nextInt();
-            play(player, row, col, board);
+            play(player, row, col, board, filled);
             gameOver = is_game_over(player, board);
             display(board);
         }
-        System.out.println("Player "+player+" Won ..!");
+        if(filled[0] != 3*3)System.out.println("Player "+player+" Won ..!");
+        else System.out.println("Match Drawn..!");
     }
 }
