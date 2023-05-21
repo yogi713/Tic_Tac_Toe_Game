@@ -170,24 +170,38 @@ class Tic_Tac_Toe {
         }
         return board;
     }
-    private static void print_board(char[][] board){
+    private static void print_board(int input, char[][] board){
         System.out.println("_____________________");
+        System.out.println();
         for(char[] row : board){
-            System.out.print("| ");
+            System.out.print(" | ");
             for(char ch : row) System.out.print(ch+" | ");
             System.out.println();
         }
         System.out.println("---------------------");
     }
+    private static void initialize_list(int size, ArrayList<Integer> row_count,
+                                        ArrayList<Integer> col_count,
+                                        ArrayList<Integer> diagonal_count){
+        for(int i=0;i<size;i++){
+            row_count.add(0);
+            col_count.add(0);
+        }
+        for(int i=0;i<2;i++) diagonal_count.add(0);
+    }
     public static void main(String[] args){
         Scanner in = new Scanner(System.in);
-        int row= 5, col= 5, max_num = 0;
+        System.out.println("Enter the n (rows and columns): ");
+        int input = in.nextInt(), row, col, max_num;
+        row= col= input;
+        max_num = 0;
         char[][] board = board(row, col);
-        ArrayList<Integer> row_count = new ArrayList<>(List.of(0,0,0,0,0));
-        ArrayList<Integer> col_count = new ArrayList<>(List.of(0,0,0,0,0));
-        ArrayList<Integer> diagonal_count = new ArrayList<>(List.of(0,0));
-        boolean valid_move = true, run = true;
-        int total_moves = row  * col, moves_completed = 0;
+        ArrayList<Integer> row_count = new ArrayList<>();
+        ArrayList<Integer> col_count = new ArrayList<>();
+        ArrayList<Integer> diagonal_count = new ArrayList<>();
+        initialize_list(input, row_count, col_count,diagonal_count);
+        boolean run = true, valid_move = true;
+        int total_moves = row  * col, moves_completed = 0, incremented_num;
         while(run){
             while(valid_move){
                 System.out.print("Enter row and col: ");
@@ -197,17 +211,17 @@ class Tic_Tac_Toe {
                 if(valid_move) System.out.println("Enter Valid Position. Try Again !");
             }
             board[row][col] = 'X';
-            int add = row_count.get(row)+1;
-            row_count.set(row,row_count.get(row)+1);
-            add = col_count.get(col)+1;
-            col_count.set(col,add);
+            incremented_num = row_count.get(row)+1;
+            row_count.set(row,incremented_num);
+            incremented_num = col_count.get(col)+1;
+            col_count.set(col,incremented_num);
             is_diagonal(row, col, board, diagonal_count);
             String max = find_max_count(max_num, board, row_count, col_count, diagonal_count);
             String[] split = max.split(" ");
             run = play(board, split[0], Integer.parseInt(split[1]));
             moves_completed += 2;
             valid_move = moves_completed < total_moves;
-            print_board(board);
+            print_board(input, board);
             winner(board);
         }
         System.out.println("Tie ..!");
