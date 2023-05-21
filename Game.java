@@ -1,5 +1,5 @@
 import java.util.*;
-class solve {
+class Tic_Tac_Toe {
     private static void check_winner(boolean X, boolean O, boolean empty){
         if(!empty){
             if(X && !O){
