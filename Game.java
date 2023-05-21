@@ -171,14 +171,12 @@ class Tic_Tac_Toe {
         return board;
     }
     private static void print_board(int input, char[][] board){
-        System.out.println("_____________________");
         System.out.println();
         for(char[] row : board){
             System.out.print(" | ");
             for(char ch : row) System.out.print(ch+" | ");
             System.out.println();
         }
-        System.out.println("---------------------");
     }
     private static void initialize_list(int size, ArrayList<Integer> row_count,
                                         ArrayList<Integer> col_count,
