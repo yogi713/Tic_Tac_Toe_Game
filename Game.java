@@ -3,11 +3,11 @@ class Tic_Tac_Toe {
     private static void check_winner(boolean X, boolean O, boolean empty){
         if(!empty){
             if(X && !O){
-                System.out.println("X won ..!");
+                System.out.println("       X won ..!");
                 System.exit(0);
             }
             else if(O && !X){
-                System.out.println("O won ..!");
+                System.out.println("       O won ..!");
                 System.exit(0);
             }
         }
@@ -111,39 +111,39 @@ class Tic_Tac_Toe {
         }
         return false;
     }
-    private static String find_max_count(int max,char[][] board, ArrayList<Integer> list_row, ArrayList<Integer> list_col,
-                                       ArrayList<Integer> list_diag){
+    private static String find_max_count(int[] max,char[][] board, ArrayList<Integer> list_row, ArrayList<Integer> list_col,
+                                         ArrayList<Integer> list_diag){
         String str = "";
         int index;
         for(int i=0;i<list_row.size(); i++){
-            if(list_row.get(i) >= max){
-                max = list_row.get(i);
+            if(list_row.get(i) >= max[0]){
+                max[0] = list_row.get(i);
                 str = "r "+i;
             }
         }
         for(int i=0;i<list_col.size(); i++){
-            if(list_col.get(i) >= max){
-                max = list_col.get(i);
+            if(list_col.get(i) >= max[0]){
+                max[0] = list_col.get(i);
                 str = "c "+i;
             }
         }
-        if(list_diag.get(0) >= max) {
-            max = list_diag.get(0);
+        if(list_diag.get(0) >= max[0]) {
+            max[0] = list_diag.get(0);
             str = "ld " + 0;
         }
-        if(list_diag.get(1) >= max) {
-            max = list_diag.get(1);
+        if(list_diag.get(1) >= max[0]) {
+            max[0] = list_diag.get(1);
             str = "rd " + 1;
         }
         return str;
     }
-    private static void is_diagonal(int row, int col, char[][] board,
-                                    ArrayList<Integer> list){
+    private static void is_diagonal_list(int row, int col, char[][] board,
+                                         ArrayList<Integer> diagonal_list){
         int i=0 , j=0 ;
         boolean found = false;
         while(!found && i<board.length && j < board[i].length){
             if(i == row && j == col){
-                list.set(0, list.get(0)+1);
+                diagonal_list.set(0, diagonal_list.get(0)+1);
                 found = true;
             }
             i++;
@@ -153,7 +153,7 @@ class Tic_Tac_Toe {
         j = board[i].length-1;
         while(!found && i<board.length && j >=0){
             if(i == row && j == col){
-                list.set(1, list.get(1)+1);
+                diagonal_list.set(1, diagonal_list.get(1)+1);
                 found = true;
             }
             i++;
@@ -166,7 +166,7 @@ class Tic_Tac_Toe {
     private static char[][] board(int row, int col){
         char[][] board = new char[row][col];
         for(char[] Row : board) {
-            for (int i = 0; i < Row.length; i++) Row[i] = '-';
+            Arrays.fill(Row, '-');
         }
         return board;
     }
@@ -190,31 +190,32 @@ class Tic_Tac_Toe {
     public static void main(String[] args){
         Scanner in = new Scanner(System.in);
         System.out.println("Enter the n (rows and columns): ");
-        int input = in.nextInt(), row, col, max_num;
+        int input = in.nextInt(), row, col;
         row= col= input;
-        max_num = 0;
+        int[] max_num = {1};
         char[][] board = board(row, col);
-        ArrayList<Integer> row_count = new ArrayList<>();
-        ArrayList<Integer> col_count = new ArrayList<>();
-        ArrayList<Integer> diagonal_count = new ArrayList<>();
-        initialize_list(input, row_count, col_count,diagonal_count);
+        print_board(input, board);
+        ArrayList<Integer> row_list = new ArrayList<>();
+        ArrayList<Integer> col_list = new ArrayList<>();
+        ArrayList<Integer> diagonal_list = new ArrayList<>();
+        initialize_list(input, row_list, col_list,diagonal_list);
         boolean run = true, valid_move = true;
-        int total_moves = row  * col, moves_completed = 0, incremented_num;
+        int total_moves = row  * col, moves_completed = 0, incremented_list;
         while(run){
             while(valid_move){
                 System.out.print("Enter row and col: ");
                 row = in.nextInt();
                 col = in.nextInt();
                 valid_move = check_move(board, row, col);
-                if(valid_move) System.out.println("Enter Valid Position. Try Again !");
+                if(valid_move) System.out.println("Enter Valid Position..!");
             }
             board[row][col] = 'X';
-            incremented_num = row_count.get(row)+1;
-            row_count.set(row,incremented_num);
-            incremented_num = col_count.get(col)+1;
-            col_count.set(col,incremented_num);
-            is_diagonal(row, col, board, diagonal_count);
-            String max = find_max_count(max_num, board, row_count, col_count, diagonal_count);
+            incremented_list = row_list.get(row)+1;
+            row_list.set(row,incremented_list);
+            incremented_list = col_list.get(col)+1;
+            col_list.set(col,incremented_list);
+            is_diagonal_list(row, col, board, diagonal_list);
+            String max = find_max_count(max_num, board, row_list, col_list, diagonal_list);
             String[] split = max.split(" ");
             run = play(board, split[0], Integer.parseInt(split[1]));
             moves_completed += 2;
@@ -222,6 +223,6 @@ class Tic_Tac_Toe {
             print_board(input, board);
             winner(board);
         }
-        System.out.println("Tie ..!");
+        System.out.println("       Tie ..!");
     }
 }
