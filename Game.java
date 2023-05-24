@@ -1,5 +1,5 @@
 import java.util.*;
-class Tic_Tac_Toe {
+public class Tic_Tac_Toe {
     private static void check_winner(boolean X, boolean O, boolean empty){
         if(!empty){
             if(X && !O){
@@ -188,41 +188,49 @@ class Tic_Tac_Toe {
         for(int i=0;i<2;i++) diagonal_count.add(0);
     }
     public static void main(String[] args){
-        Scanner in = new Scanner(System.in);
-        System.out.println("Enter the n (rows and columns): ");
-        int input = in.nextInt(), row, col;
-        row= col= input;
-        int[] max_num = {1};
-        char[][] board = board(row, col);
-        print_board(input, board);
-        ArrayList<Integer> row_list = new ArrayList<>();
-        ArrayList<Integer> col_list = new ArrayList<>();
-        ArrayList<Integer> diagonal_list = new ArrayList<>();
-        initialize_list(input, row_list, col_list,diagonal_list);
-        boolean run = true, valid_move = true;
-        int total_moves = row  * col, moves_completed = 0, incremented_list;
-        while(run){
-            while(valid_move){
-                System.out.print("Enter row and col: ");
-                row = in.nextInt();
-                col = in.nextInt();
-                valid_move = check_move(board, row, col);
-                if(valid_move) System.out.println("Enter Valid Position..!");
-            }
-            board[row][col] = 'X';
-            incremented_list = row_list.get(row)+1;
-            row_list.set(row,incremented_list);
-            incremented_list = col_list.get(col)+1;
-            col_list.set(col,incremented_list);
-            is_diagonal_list(row, col, board, diagonal_list);
-            String max = find_max_count(max_num, board, row_list, col_list, diagonal_list);
-            String[] split = max.split(" ");
-            run = play(board, split[0], Integer.parseInt(split[1]));
-            moves_completed += 2;
-            valid_move = moves_completed < total_moves;
+        try{
+            Scanner in = new Scanner(System.in);
+            System.out.println("*** TIC TAC TOE ***");
+            System.out.println("Enter the n (rows and columns): ");
+            int input = in.nextInt(), row, col;
+            row= col= input;
+            int[] max_num = {1};
+            char[][] board = board(row, col);
             print_board(input, board);
-            winner(board);
+            System.out.println("You -> X");
+            System.out.println("Computer -> O");
+            ArrayList<Integer> row_list = new ArrayList<>();
+            ArrayList<Integer> col_list = new ArrayList<>();
+            ArrayList<Integer> diagonal_list = new ArrayList<>();
+            initialize_list(input, row_list, col_list,diagonal_list);
+            boolean run = true, valid_move = true;
+            int total_moves = row  * col, moves_completed = 0, incremented_list;
+            while(run){
+                while(valid_move){
+                    System.out.print("Enter row and col: ");
+                    row = in.nextInt();
+                    col = in.nextInt();
+                    valid_move = check_move(board, row, col);
+                    if(valid_move) System.out.println("Enter Valid Position..!");
+                }
+                board[row][col] = 'X';
+                incremented_list = row_list.get(row)+1;
+                row_list.set(row,incremented_list);
+                incremented_list = col_list.get(col)+1;
+                col_list.set(col,incremented_list);
+                is_diagonal_list(row, col, board, diagonal_list);
+                String max = find_max_count(max_num, board, row_list, col_list, diagonal_list);
+                String[] split = max.split(" ");
+                run = play(board, split[0], Integer.parseInt(split[1]));
+                moves_completed += 2;
+                valid_move = moves_completed < total_moves;
+                print_board(input, board);
+                winner(board);
+            }
+            System.out.println("       Tie ..!");
+        }catch(Exception ex){
+            System.out.println("Input Mismatch, Game Restarting..!");
+            main(new String[]{});
         }
-        System.out.println("       Tie ..!");
     }
 }
